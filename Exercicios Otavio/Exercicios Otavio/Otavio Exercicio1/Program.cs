@@ -54,7 +54,40 @@ namespace Exercicios_Otavio
             Console.WriteLine("#PRÓXIMO EXERCICIO.");
 
             //11)
-            ListaRandom.NumerosRandomizados();
+            ListaRandom listaNumeros = new ListaRandom();
+
+            int [] numeros =listaNumeros.GetNumeros();
+
+            Console.WriteLine("Lista de números inteiros aleatórios!");
+
+            for (int index = 0; index < numeros.Length; index++)
+            {
+                Console.WriteLine($"Número da lista {index + 1} recebeu : {numeros[index]}");
+            }
+
+
+
+            //imprimir em crescente e decrescente.
+
+            //crescente
+            Array.Sort(numeros);
+            Console.WriteLine("Lista em Ordem crescente:");
+            for (int index = 0; index < numeros.Length; index++)
+            {
+                Console.WriteLine($"Número {index + 1}: {numeros[index]}");
+            }
+
+            //decrescente
+
+            Array.Reverse(numeros);
+
+            Console.WriteLine("Lista em ordem decrescente: ");
+
+            for (int index = 0; index < numeros.Length; index++)
+            {
+                Console.WriteLine($"Número {index + 1}: {numeros[index]}");
+            }
+
 
             Console.WriteLine("Presione qualquer tecla para finalizar...");
             Console.ReadKey();
