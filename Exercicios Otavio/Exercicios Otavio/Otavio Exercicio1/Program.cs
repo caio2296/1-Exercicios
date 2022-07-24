@@ -1,4 +1,5 @@
 ﻿using System;
+using Exercicios_Otavio.Otavio_Exercicio1;
 
 namespace Exercicios_Otavio
 {
@@ -48,7 +49,12 @@ namespace Exercicios_Otavio
 
             //Console.WriteLine("#PRÓXIMO EXERCICIO.");
             //10)
-            Maior2();
+            //Maior2();
+
+            Console.WriteLine("#PRÓXIMO EXERCICIO.");
+
+            //11)
+            ListaRandom.NumerosRandomizados();
 
             Console.WriteLine("Presione qualquer tecla para finalizar...");
             Console.ReadKey();
