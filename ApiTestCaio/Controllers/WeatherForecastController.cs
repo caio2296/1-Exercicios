@@ -14,18 +14,28 @@ namespace ApiTestCaio.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        const string connectionString = @"aaaa";
+
+         
+
 
         [HttpGet]
         public IEnumerable<string> Get()
         {
+            return SqlGets();
+
+        }
+
+        private static IEnumerable<string> SqlGets()
+        {
+            int ids;
             using (var conexao = new SqlConnection())
             {
+               
                 conexao.ConnectionString =
 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Pessoa;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
                 using (SqlCommand comando =
-                    new SqlCommand(@"select nome, idade from pessoa", conexao))
+                    new SqlCommand(@"select * from pessoa", conexao))
                 {
 
                     List<string> Pessoa = new List<string>();
@@ -35,8 +45,10 @@ namespace ApiTestCaio.Controllers
                     {
 
                         Pessoa.Add(leitor[0].ToString());
-                        Pessoa.Add(leitor[1].ToString());
 
+                        Pessoa.Add(leitor[1].ToString());
+                        Pessoa.Add(leitor[2].ToString());
+                        ids = int.Parse(leitor[0].ToString());
                     }
 
 
@@ -46,12 +58,51 @@ namespace ApiTestCaio.Controllers
                 }
 
             }
-
         }
 
 
+        private static int SlqGetsId()
+        {
+            int ids=0;
+            using (var conexao = new SqlConnection())
+            {
+
+                conexao.ConnectionString =
+@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Pessoa;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+                using (SqlCommand comando =
+                    new SqlCommand(@"select * from pessoa", conexao))
+                {
+
+                   
+                    conexao.Open();
+                    var leitor = comando.ExecuteReader();
+                    while (leitor.Read())
+                    {
+
+                        ids = int.Parse(leitor[0].ToString());
+                    }
+                    
+                    return ids;
+                    
+
+
+                }
+
+            }
+
+
+
+        }
+
         [HttpGet("{id_pessoa}")]
         public ActionResult<string> Get(int id_pessoa)
+        {
+            return SqlGet(id_pessoa);
+
+        }
+
+        private static ActionResult<string> SqlGet(int id_pessoa)
         {
             using (var conexao = new SqlConnection())
             {
@@ -62,14 +113,14 @@ namespace ApiTestCaio.Controllers
                     new SqlCommand(@$"select nome, idade from pessoa where id_pessoa ={id_pessoa}", conexao))
                 {
 
-                    string Pessoa="";
+                    string Pessoa = "";
                     conexao.Open();
                     var leitor = comando.ExecuteReader();
                     while (leitor.Read())
                     {
 
-                        Pessoa=(leitor[0].ToString()) + " " + (leitor[1].ToString());
-                        
+                        Pessoa = (leitor[0].ToString()) + " " + (leitor[1].ToString());
+
 
                     }
 
@@ -80,31 +131,42 @@ namespace ApiTestCaio.Controllers
                 }
 
             }
-
         }
-
-
 
         [HttpPost]
         public void Post([FromBody] object value)
         {
 
-            
+
             //INSERT INTO pessoa (id_pessoa,nome,idade) values (4,'Renato', 15);
-            
+
             //            {
-                    //                "pessoa": {
-                    //                    "id_pessoa": "5",
-                    // "nome" : "Caio",
-                    // "idade": "10"
-                    
+            //                "pessoa": {
+            //                    "id_pessoa": "5",
+            // "nome" : "Caio",
+            // "idade": "10"
 
 
-                    //}
-                    //            }
+
+            //}
+            //            }
+
+            
+
             string pessoa = value.ToString();
 
             Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(pessoa);
+
+
+            SqlPost(myDeserializedClass);
+        }
+
+        private static void SqlPost(Root myDeserializedClass)
+        {
+
+            int ids = SlqGetsId();
+
+            IEnumerable<string> enumerable = SqlGets();
 
             using (var conexao = new SqlConnection())
             {
@@ -116,12 +178,12 @@ namespace ApiTestCaio.Controllers
 
                 using (SqlCommand comando =
                     new SqlCommand(
-                        @$"INSERT INTO pessoa (id_pessoa,nome,idade) values ({myDeserializedClass.pessoa.id_pessoa},'{myDeserializedClass.pessoa.nome}', {myDeserializedClass.pessoa.idade})", conexao))
+                        @$"INSERT INTO pessoa (id_pessoa,nome,idade) values ({ids+1},'{myDeserializedClass.pessoa.nome}', {myDeserializedClass.pessoa.idade})", conexao))
                 {
 
-                    
+
                     conexao.Open();
-                     comando.ExecuteNonQuery();
+                    comando.ExecuteNonQuery();
 
 
 
@@ -132,6 +194,7 @@ namespace ApiTestCaio.Controllers
 
             }
         }
+
         [HttpPut("{id_pessoa}")]
         public void Put(int id_pessoa, [FromBody] object value)
         {
@@ -143,7 +206,12 @@ namespace ApiTestCaio.Controllers
 
             Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(pessoa);
 
+            SqlPut(id_pessoa, myDeserializedClass);
 
+        }
+
+        private static void SqlPut(int id_pessoa, Root myDeserializedClass)
+        {
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString =
@@ -169,8 +237,6 @@ namespace ApiTestCaio.Controllers
                 }
 
             }
-
-
         }
 
         [HttpDelete("{id_pessoa}")]
@@ -178,6 +244,12 @@ namespace ApiTestCaio.Controllers
         {
             //DELETE FROM pessoa WHERE id_pessoa=4;
 
+            SqlDelete(id_pessoa);
+
+        }
+
+        private static void SqlDelete(int id_pessoa)
+        {
             using (var conexao = new SqlConnection())
             {
                 conexao.ConnectionString =
@@ -196,27 +268,8 @@ namespace ApiTestCaio.Controllers
                 }
 
             }
-
-
         }
-
-
     }
 }
 
 
-
-
-
-//// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-public class Pessoa
-{
-    public int id_pessoa { get; set; }
-    public string nome { get; set; }
-    public int idade { get; set; }
-}
-
-public class Root
-{
-    public Pessoa pessoa { get; set; }
-}
