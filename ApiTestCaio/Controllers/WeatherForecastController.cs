@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace ApiTestCaio.Controllers
 {
@@ -84,16 +86,13 @@ namespace ApiTestCaio.Controllers
 
 
         [HttpPost]
-        public void Post([FromBody] int id_pessoa, string nome, int idade)
+        public void Post([FromBody] object value)
         {
+
+            
             //INSERT INTO pessoa (id_pessoa,nome,idade) values (4,'Renato', 15);
-
-            using (var conexao = new SqlConnection())
-            {
-                conexao.ConnectionString =
-@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Pessoa;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-                    //            {
+            
+            //            {
                     //                "pessoa": {
                     //                    "id_pessoa": "5",
                     // "nome" : "Caio",
@@ -103,13 +102,24 @@ namespace ApiTestCaio.Controllers
 
                     //}
                     //            }
+            string pessoa = value.ToString();
+
+            Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(pessoa);
+
+            using (var conexao = new SqlConnection())
+            {
+                conexao.ConnectionString =
+@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Pessoa;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+
 
 
                 using (SqlCommand comando =
-                    new SqlCommand(@$"INSERT INTO pessoa (id_pessoa,nome,idade) values ({id_pessoa},'{nome}', {idade})", conexao))
+                    new SqlCommand(
+                        @$"INSERT INTO pessoa (id_pessoa,nome,idade) values ({myDeserializedClass.pessoa.id_pessoa},'{myDeserializedClass.pessoa.nome}', {myDeserializedClass.pessoa.idade})", conexao))
                 {
 
-                    string Pessoa = "";
+                    
                     conexao.Open();
                      comando.ExecuteNonQuery();
 
@@ -123,8 +133,43 @@ namespace ApiTestCaio.Controllers
             }
         }
         [HttpPut("{id_pessoa}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id_pessoa, [FromBody] object value)
         {
+
+            //UPDATE pessoa SET nome = 'Caio Cesar', idade = 21
+            //WHERE id_pessoa = 1
+
+            string pessoa = value.ToString();
+
+            Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(pessoa);
+
+
+            using (var conexao = new SqlConnection())
+            {
+                conexao.ConnectionString =
+@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Pessoa;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+
+
+
+                using (SqlCommand comando =
+                    new SqlCommand(
+                        @$"UPDATE pessoa SET nome = '{myDeserializedClass.pessoa.nome}', idade = {myDeserializedClass.pessoa.idade} WHERE id_pessoa = {id_pessoa} ", conexao))
+                {
+
+
+                    conexao.Open();
+                    comando.ExecuteNonQuery();
+
+
+
+
+
+
+                }
+
+            }
+
 
         }
 
@@ -157,4 +202,21 @@ namespace ApiTestCaio.Controllers
 
 
     }
+}
+
+
+
+
+
+//// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+public class Pessoa
+{
+    public int id_pessoa { get; set; }
+    public string nome { get; set; }
+    public int idade { get; set; }
+}
+
+public class Root
+{
+    public Pessoa pessoa { get; set; }
 }
