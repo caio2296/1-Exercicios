@@ -12,11 +12,11 @@ namespace ApiTestCaio.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class CaioApiController : ControllerBase
     {
 
          
-
+        //Get
 
         [HttpGet]
         public IEnumerable<string> Get()
@@ -27,7 +27,7 @@ namespace ApiTestCaio.Controllers
 
         private static IEnumerable<string> SqlGets()
         {
-            int ids;
+            
             using (var conexao = new SqlConnection())
             {
                
@@ -35,7 +35,7 @@ namespace ApiTestCaio.Controllers
 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Pessoa;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
                 using (SqlCommand comando =
-                    new SqlCommand(@"select * from pessoa", conexao))
+                    new SqlCommand(@"select nome , idade from pessoa", conexao))
                 {
 
                     List<string> Pessoa = new List<string>();
@@ -47,8 +47,8 @@ namespace ApiTestCaio.Controllers
                         Pessoa.Add(leitor[0].ToString());
 
                         Pessoa.Add(leitor[1].ToString());
-                        Pessoa.Add(leitor[2].ToString());
-                        ids = int.Parse(leitor[0].ToString());
+                        
+                        
                     }
 
 
@@ -133,10 +133,14 @@ namespace ApiTestCaio.Controllers
             }
         }
 
-        [HttpPost]
-        public void Post([FromBody] object value)
-        {
 
+
+        //Post
+
+        [HttpPost]
+        public ActionResult<string> Post([FromBody] object value)
+        {
+            string mensagem = "";
 
             //INSERT INTO pessoa (id_pessoa,nome,idade) values (4,'Renato', 15);
 
@@ -152,13 +156,41 @@ namespace ApiTestCaio.Controllers
             //            }
 
             
-
-            string pessoa = value.ToString();
-
-            Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(pessoa);
+            try
+            {
 
 
-            SqlPost(myDeserializedClass);
+                string pessoa = value.ToString();
+
+                Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(pessoa);
+
+                SqlPost(myDeserializedClass);
+
+                
+
+                return mensagem = "Dados inseridos com sucesso!";
+
+                
+
+            }
+            catch (NullReferenceException ex)
+            {
+
+                return mensagem= ex.Message;
+                throw;
+            }
+            catch (Exception)
+            {
+                return mensagem = "Ocorreu um erro!";
+                throw;
+            }
+
+            
+
+           
+
+
+
         }
 
         private static void SqlPost(Root myDeserializedClass)
@@ -173,7 +205,11 @@ namespace ApiTestCaio.Controllers
                 conexao.ConnectionString =
 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Pessoa;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
+                if(myDeserializedClass == null)
+                {
+                    throw new NullReferenceException("Referencia nula");
 
+                }
 
 
                 using (SqlCommand comando =
@@ -194,6 +230,9 @@ namespace ApiTestCaio.Controllers
 
             }
         }
+
+
+        //Put
 
         [HttpPut("{id_pessoa}")]
         public void Put(int id_pessoa, [FromBody] object value)
@@ -238,6 +277,9 @@ namespace ApiTestCaio.Controllers
 
             }
         }
+
+
+        //Delete
 
         [HttpDelete("{id_pessoa}")]
         public void Delete(int id_pessoa)
