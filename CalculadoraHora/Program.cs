@@ -20,73 +20,66 @@ namespace CalculadoraHora
 
         static void Main(string[] args)
         {
-            Inicializando();
+            PerfilTrabalhador();
 
-            Trabalhador pessoa = new Trabalhador();
+            Trabalhador pessoa = EscolherModalidadeTrabalho();
 
-            if (Trabalhador.EMensalista)
-            {
-                 pessoa = new Mensalista();
+            LeituraConsole(PerfilProduto(pessoa));
 
-                
-
-                
-            }
-            else
-            {
-                 pessoa = new Horista();
-            }
-
-
-            Console.WriteLine($"Quanto por hora a pessoa ganha: {pessoa.GanhoHora}");
-
-            Console.WriteLine("Nome do Produto:");
-
-            Produto.NomeP = Console.ReadLine();
-            bool validoP = true;
-
-            while (validoP)
-            {
-
-                Console.WriteLine("Valor do Produto:");
-
-                if (float.TryParse(Console.ReadLine(), out float valor))
-                {
-                    Produto.Valor = valor;
-
-
-
-                    Console.WriteLine(
-                        $"As horas nescessarias para comprar {Produto.NomeP}" +
-                        $" e de: {Produto.CalcularHoras(pessoa.GanhoHora)} ");
-                    validoP = false;
-                }
-                else
-                {
-                    Console.WriteLine("Insira o valor do produto valido!");
-                    validoP = true;
-                }
-            }
-
-            
-            
 
             Console.ReadKey();
 
 
         }
 
-        private static void Inicializando()
+        public static void CalcularGanhoTValorP(Trabalhador pessoa)
+        {
+            Console.WriteLine(
+                $"As horas nescessarias para comprar {Produto.NomeP}" +
+                $" e de: {Produto.CalcularHoras(pessoa.GanhoPorHora)} ");
+        }
+
+        private static string PerfilProduto(Trabalhador pessoa)
+        {
+            Console.WriteLine("Nome do Produto:");
+
+            Produto.NomeP = Console.ReadLine();
+
+            return Produto.ComprarBaseHora(pessoa);
+        }
+
+        private static Trabalhador EscolherModalidadeTrabalho()
+        {
+            Trabalhador pessoa = new Trabalhador();
+
+            if (Trabalhador.EMensalista)
+            {
+                pessoa = new Mensalista();
+
+            }
+            else
+            {
+                pessoa = new Horista();
+            }
+
+            Console.WriteLine($"Quanto por hora essa pessoa ganha: {pessoa.GanhoPorHora}");
+
+
+            return pessoa;
+        }
+
+
+        private static void PerfilTrabalhador()
         {
             Console.WriteLine("Insira o nome do Trabalhador:");
 
             Trabalhador.Nome = Console.ReadLine();
 
 
-            string resposta;
-            bool ModuloValido = true;
+            string respostaDoUsuario;
+            bool respostaValida = true;
 
-            while (ModuloValido)
+            while (respostaValida)
             {
                 Console.WriteLine("O Trabalhador e mensalista? ");
                 Console.WriteLine("Insira a opção: ");
@@ -94,31 +87,31 @@ namespace CalculadoraHora
                 Console.WriteLine("1. Mensalista ");
 
                 Console.WriteLine("2. Horista ");
-                resposta = Console.ReadLine();
+                respostaDoUsuario = Console.ReadLine();
 
-                if (resposta != null && int.TryParse(resposta, out int numero))
+                if (respostaDoUsuario != null && int.TryParse(respostaDoUsuario, out int numero))
                 {
                     if (numero < 2 && numero > 0) //1 é mensalista
                     {
                         Trabalhador.EMensalista = true;
-                        ModuloValido = false;
+                        respostaValida = false;
                     }
                     else if (numero == 2) //0 é horista
                     {
                         Trabalhador.EMensalista = false;
-                        ModuloValido = false;
+                        respostaValida = false;
                     }
                     else
                     {
                         Console.WriteLine("Insira a opção correta! ");
 
-                        ModuloValido = true;
+                        respostaValida = true;
                     }
                 }
                 else
                 {
                     Console.WriteLine("Insira a opção correta! ");
-                    ModuloValido = true;
+                    respostaValida = true;
                 }
             }
         }

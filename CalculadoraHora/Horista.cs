@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CalculadoraHora
 {
-    class Horista : Trabalhador, ITrabalhador
+    class Horista : Trabalhador, ICalcularGanho
     {
 
         //horista
@@ -20,35 +20,35 @@ namespace CalculadoraHora
 
         public Horista()
         {
-            SetSalario();
+            SetGanhoPorHora();
         }
 
-        public float SetSalario()
+        public float SetGanhoPorHora()
         {
-            bool respostaValida = true;
-            while (respostaValida)
+             valorValido = true;
+            while (valorValido)
             {
                 SetConsole("Quanto por hora você recebe?");
 
 
                 if (float.TryParse(Console.ReadLine().Replace(".", ","), out float hora))
                 {
-                    GanhoHora = hora;
+                    GanhoPorHora = hora;
 
                     SetConsole($"Você recebe por hora {Math.Round(hora, 2)}");
-                    respostaValida = false;
+                    valorValido = false;
 
                 }
                 else
                 {
                     SetConsole("Insira um salario válido! ");
-                    respostaValida = true;
+                    valorValido = true;
                 }
 
             }
 
 
-            return GanhoHora;
+            return GanhoPorHora;
         }
     }
 }

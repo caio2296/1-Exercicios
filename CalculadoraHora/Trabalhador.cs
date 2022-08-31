@@ -9,7 +9,9 @@ namespace CalculadoraHora
         public static string Nome { set; protected get; }
         public static bool EMensalista { set;  get; }
 
-        public  float GanhoHora { protected set;  get; }
+        public  float GanhoPorHora { protected set;  get; }
+
+        protected bool valorValido;
 
      public static string Mensagem;
 

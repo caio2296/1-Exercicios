@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CalculadoraHora
 {
-    class Mensalista : Trabalhador, ITrabalhador
+    class Mensalista : Trabalhador, ICalcularGanho
     {
 
         //mensalista
@@ -21,15 +21,15 @@ namespace CalculadoraHora
         public Mensalista()
         {
 
-            SetSalario();
+            SetGanhoPorHora();
         }
 
-        public float SetSalario()
+        public float SetGanhoPorHora()
         {
-
             
-            bool respostaValida = true;
-            while (respostaValida)
+            
+             valorValido = true;
+            while (valorValido)
             {
                 SetConsole("Quanto por mes você recebe?");
 
@@ -40,28 +40,28 @@ namespace CalculadoraHora
 
                     if (float.TryParse(Console.ReadLine().Replace(".", ","), out float hsemana) && hsemana <= 44)
                     {
-                        GanhoHora = (mes / 5) / hsemana;
-                        SetConsole($"Você recebe por hora {Math.Round(GanhoHora, 2)}");
-                        respostaValida = false;
+                        GanhoPorHora = (mes / 4) / hsemana;
+                        SetConsole($"Você recebe por hora {Math.Round(GanhoPorHora, 2)}");
+                        valorValido = false;
                         
                     }
                     else {
 
                         SetConsole("Insira uma jornada semanal válida! (limite ate 44 horas semanais) ");
-                        respostaValida = true;
+                        valorValido = true;
                     }
 
                 }
                 else
                 {
                     SetConsole("Insira um salario válido! ");
-                    respostaValida = true;
+                    valorValido = true;
                 }
 
             }
 
 
-            return GanhoHora;
+            return GanhoPorHora;
         }
 
 

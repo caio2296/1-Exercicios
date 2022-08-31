@@ -4,9 +4,11 @@ using System.Text;
 
 namespace CalculadoraHora.Interface
 {
-    interface ITrabalhador
+    interface ICalcularGanho
     {
-        public float SetSalario();
+        public float SetGanhoPorHora();
+
+
 
     }
 }
