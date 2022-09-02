@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalculadoraHora.Interface;
+using System;
 
 namespace CalculadoraHora
 {
@@ -20,11 +21,11 @@ namespace CalculadoraHora
 
         static void Main(string[] args)
         {
-            PerfilTrabalhador();
+            RegistrarPerfilTrabalhador();
 
-            Trabalhador pessoa = EscolherModalidadeTrabalho();
+            ICalcularGanho pessoa = EscolherCalculoGanho();
 
-            LeituraConsole(PerfilProduto(pessoa));
+            LerConsole(RegistrarPerfilProduto(pessoa));
 
 
             Console.ReadKey();
@@ -32,14 +33,14 @@ namespace CalculadoraHora
 
         }
 
-        public static void CalcularGanhoTValorP(Trabalhador pessoa)
+        public static void CalcularGanhoTValorP()
         {
             Console.WriteLine(
                 $"As horas nescessarias para comprar {Produto.NomeP}" +
-                $" e de: {Produto.CalcularHoras(pessoa.GanhoPorHora)} ");
+                $" e de: {Produto.CalcularHoras(Trabalhador.GanhoPorHora)} ");
         }
 
-        private static string PerfilProduto(Trabalhador pessoa)
+        private static string RegistrarPerfilProduto(ICalcularGanho pessoa)
         {
             Console.WriteLine("Nome do Produto:");
 
@@ -48,9 +49,9 @@ namespace CalculadoraHora
             return Produto.ComprarBaseHora(pessoa);
         }
 
-        private static Trabalhador EscolherModalidadeTrabalho()
+        private static ICalcularGanho EscolherCalculoGanho()
         {
-            Trabalhador pessoa = new Trabalhador();
+            ICalcularGanho pessoa = new Trabalhador();
 
             if (Trabalhador.EMensalista)
             {
@@ -62,14 +63,16 @@ namespace CalculadoraHora
                 pessoa = new Horista();
             }
 
-            Console.WriteLine($"Quanto por hora essa pessoa ganha: {pessoa.GanhoPorHora}");
+            pessoa.SetGanhoPorHora();
+
+           
 
 
             return pessoa;
         }
 
 
-        private static void PerfilTrabalhador()
+        private static void RegistrarPerfilTrabalhador()
         {
             Console.WriteLine("Insira o nome do Trabalhador:");
 
@@ -116,7 +119,7 @@ namespace CalculadoraHora
             }
         }
 
-        public static void LeituraConsole(string mensagem)
+        public static void LerConsole(string mensagem)
         {
 
             Console.WriteLine(mensagem);

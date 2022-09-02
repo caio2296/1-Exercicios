@@ -18,13 +18,9 @@ namespace CalculadoraHora
         
 
 
-        public Mensalista()
-        {
 
-            SetGanhoPorHora();
-        }
 
-        public float SetGanhoPorHora()
+        public new float SetGanhoPorHora()
         {
             
             

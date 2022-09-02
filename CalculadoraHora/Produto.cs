@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalculadoraHora.Interface;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,7 +20,7 @@ namespace CalculadoraHora
             return Math.Round(Valor,2);
         }
 
-        public static string ComprarBaseHora(Trabalhador pessoa)
+        public static string ComprarBaseHora(ICalcularGanho pessoa)
         {
 
 
@@ -36,7 +37,7 @@ namespace CalculadoraHora
                   
                     validoP = false;
 
-                    return CalcularGanhoTValorP(pessoa);
+                    return CalcularGanhoTValorP();
                 }
                 else
                 {
@@ -49,11 +50,14 @@ namespace CalculadoraHora
             return null;
         }
 
-        private static string CalcularGanhoTValorP(Trabalhador pessoa)
+        private static string CalcularGanhoTValorP()
         {
+           
+            
+
             return
                 $"As horas nescessarias para comprar {Produto.NomeP}" +
-                $" e de: {Produto.CalcularHoras(pessoa.GanhoPorHora)} ";
+                $" e de: {Produto.CalcularHoras(Trabalhador.GanhoPorHora)} ";
         }
     }
 }

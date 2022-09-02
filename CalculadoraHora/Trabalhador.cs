@@ -1,15 +1,16 @@
-﻿using System;
+﻿using CalculadoraHora.Interface;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CalculadoraHora
 {
-    class Trabalhador
+    class Trabalhador: ICalcularGanho
     {
         public static string Nome { set; protected get; }
         public static bool EMensalista { set;  get; }
 
-        public  float GanhoPorHora { protected set;  get; }
+        public static float GanhoPorHora { protected set;  get; }
 
         protected bool valorValido;
 
@@ -35,10 +36,14 @@ namespace CalculadoraHora
         protected static void SetConsole(string mensagem)
         {
             Mensagem = mensagem;
-            Program.LeituraConsole(Mensagem);
+            Program.LerConsole(Mensagem);
             
         }
 
+        public float SetGanhoPorHora()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

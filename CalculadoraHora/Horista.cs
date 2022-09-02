@@ -18,12 +18,9 @@ namespace CalculadoraHora
 
 
 
-        public Horista()
-        {
-            SetGanhoPorHora();
-        }
+     
 
-        public float SetGanhoPorHora()
+        public new float SetGanhoPorHora()
         {
              valorValido = true;
             while (valorValido)
