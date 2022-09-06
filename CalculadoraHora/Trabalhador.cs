@@ -7,8 +7,8 @@ namespace CalculadoraHora
 {
     class Trabalhador: ICalcularGanho
     {
-        public static string Nome { set; protected get; }
-        public static bool EMensalista { set;  get; }
+        public  string Nome { set; protected get; }
+        public  bool EMensalista { set;  get; }
 
         public static float GanhoPorHora { protected set;  get; }
 
@@ -26,7 +26,9 @@ namespace CalculadoraHora
         {
             string nome;
 
-            nome = Nome;
+            Trabalhador trabalhador = new Trabalhador();
+
+            nome = trabalhador.Nome;
 
             return nome;
         }

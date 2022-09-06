@@ -21,11 +21,23 @@ namespace CalculadoraHora
 
         static void Main(string[] args)
         {
-            RegistrarPerfilTrabalhador();
 
-            ICalcularGanho pessoa = EscolherCalculoGanho();
+            Trabalhador trabalhador = new Trabalhador();
 
-            LerConsole(RegistrarPerfilProduto(pessoa));
+            trabalhador.Nome =  ObterTrabalhador();
+
+            RegistrarTrabalhador(trabalhador);
+
+            EscolherCalculoGanho(trabalhador);
+
+            Produto produto = new Produto();
+
+            produto.NomeP = ObterProduto();
+
+            RegistrarPerfilProduto(produto);
+
+
+            LerConsole(Calculadora.ComprarBaseHora(trabalhador, produto));
 
 
             Console.ReadKey();
@@ -33,51 +45,83 @@ namespace CalculadoraHora
 
         }
 
-        public static void CalcularGanhoTValorP()
+
+
+        private static void RegistrarPerfilProduto(Produto produto)
         {
-            Console.WriteLine(
-                $"As horas nescessarias para comprar {Produto.NomeP}" +
-                $" e de: {Produto.CalcularHoras(Trabalhador.GanhoPorHora)} ");
+            while (produto.validoP)
+            {
+                Console.WriteLine("Valor do Produto:");
+
+                if (float.TryParse(Console.ReadLine(), out float valor))
+                {
+                    produto.Valor = valor;
+
+
+                    produto.validoP = false;
+
+                    
+                }
+                else
+                {
+
+                    produto.validoP = true;
+
+                   LerConsole("Insira o valor do produto valido!");
+                }
+            }
+
+            
+
+            
         }
 
-        private static string RegistrarPerfilProduto(ICalcularGanho pessoa)
+        private static string ObterProduto()
         {
             Console.WriteLine("Nome do Produto:");
 
-            Produto.NomeP = Console.ReadLine();
 
-            return Produto.ComprarBaseHora(pessoa);
+           return Console.ReadLine();
         }
 
-        private static ICalcularGanho EscolherCalculoGanho()
+        private static void EscolherCalculoGanho(Trabalhador trabalhador)
         {
-            ICalcularGanho pessoa = new Trabalhador();
+            ICalcularGanho tipoGanho = trabalhador;
 
-            if (Trabalhador.EMensalista)
+            if (trabalhador.EMensalista)
             {
-                pessoa = new Mensalista();
+                tipoGanho = new Mensalista();
 
             }
             else
             {
-                pessoa = new Horista();
+                tipoGanho = new Horista();
             }
 
-            pessoa.SetGanhoPorHora();
+            tipoGanho.SetGanhoPorHora();
 
            
 
 
-            return pessoa;
+            
         }
 
 
-        private static void RegistrarPerfilTrabalhador()
+        private static string ObterTrabalhador()
         {
+
             Console.WriteLine("Insira o nome do Trabalhador:");
 
-            Trabalhador.Nome = Console.ReadLine();
+            return  Console.ReadLine();
 
+            
+
+        }
+
+
+        private static void RegistrarTrabalhador(Trabalhador trabalhador)
+        {
+            
 
             string respostaDoUsuario;
             bool respostaValida = true;
@@ -96,12 +140,12 @@ namespace CalculadoraHora
                 {
                     if (numero < 2 && numero > 0) //1 é mensalista
                     {
-                        Trabalhador.EMensalista = true;
+                        trabalhador.EMensalista = true;
                         respostaValida = false;
                     }
                     else if (numero == 2) //0 é horista
                     {
-                        Trabalhador.EMensalista = false;
+                        trabalhador.EMensalista = false;
                         respostaValida = false;
                     }
                     else
