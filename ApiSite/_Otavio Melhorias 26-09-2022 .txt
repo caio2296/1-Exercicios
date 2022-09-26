@@ -1,0 +1,17 @@
+﻿1 - Utilizar Injeção de Dependencia (DI) 
+	1.1 - apenas estudar a inversão de controle ( IoC ) já que você vai usa-la na DI 
+	1.2 -apenas estudar também o principio de inversão de dependencia
+
+2 - Melhoria na query
+Nunca utilizar * no select ( pode pesquisar por que não fazer isso no código )
+
+select * from Usuario 
+
+solução
+select nome, idade, etc... from usuario
+
+3 - O método get deve retornar uma lista de usuario e não uma lista de string assim como o comando ler usuarios
+
+4 - Nunca vi métodos estáticos sendo utilizado como repositorio como a classe SqlComandos, 
+mas ainda vou pesquisar melhor o motivo e te passar.
+
