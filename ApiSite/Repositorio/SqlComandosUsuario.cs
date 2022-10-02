@@ -8,10 +8,11 @@ using System.Data.SqlClient;
 
 namespace ApiSite
 {
-    public class SqlComandos
+    public class SqlComandosUsuario
     {
+        //criar uma interface com esses metodos 
 
-        public  IEnumerable<Usuario> SqlComandoLerUsuarios()
+        public  IEnumerable<Usuario> SqlComandoLeituras()
         {
             
 
@@ -61,7 +62,7 @@ namespace ApiSite
         }
 
 
-        public  IEnumerable<Usuario> SqlComandoLerUsuario(int id)
+        public  IEnumerable<Usuario> SqlComandoLeitura(int id)
         {
             Usuario usuario = new Usuario();
 
@@ -138,9 +139,9 @@ namespace ApiSite
         }
 
         
-        public  void SqlComandoAtualizarUsuario(int id, Usuario usuarioNovosDados)
+        public  void SqlComandoAtualizar(int id, Usuario usuarioNovosDados)
         {
-            SqlComandos comandos = new SqlComandos();
+            SqlComandosUsuario comandos = new SqlComandosUsuario();
 
             string connectionString = 
                 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
@@ -158,7 +159,7 @@ namespace ApiSite
                 {
 
 
-                    usuarioAntigosDados = comandos.SqlComandoLerUsuario(id).ToList();
+                    usuarioAntigosDados = comandos.SqlComandoLeitura(id).ToList();
 
                     if (Verificacao.VerificarAtualizacaoUsuario(usuarioNovosDados, usuarioAntigosDados))
                     {

@@ -13,26 +13,26 @@ namespace ApiSite.Controllers
     public class ApiSiteController : ControllerBase
     {
 
+        string mensagem;
 
 
-       
 
         [HttpGet]
         //[Route("adm")]
         public IEnumerable<Usuario> Get()
         {
-            SqlComandos comandos = new SqlComandos();
+            SqlComandosUsuario comandos = new SqlComandosUsuario();
 
-            return comandos.SqlComandoLerUsuarios();
+            return comandos.SqlComandoLeituras();
         }
 
 
         [HttpGet("{id}")]
         public IEnumerable<Usuario> Get(int id)
         {
-            SqlComandos comandos = new SqlComandos();
+            SqlComandosUsuario comandos = new SqlComandosUsuario();
 
-            return comandos.SqlComandoLerUsuario(id);
+            return comandos.SqlComandoLeitura(id);
         }
 
 
@@ -40,7 +40,7 @@ namespace ApiSite.Controllers
         [HttpPost]
         public ActionResult<string> Post([FromBody] object cadastro)
         {
-            SqlComandos comandos = new SqlComandos();
+            SqlComandosUsuario comandos = new SqlComandosUsuario();
 
             string pessoa = cadastro.ToString();
 
@@ -72,7 +72,7 @@ namespace ApiSite.Controllers
         [HttpPatch("{id}")]
         public ActionResult<string> Patch(int id, [FromBody] object novosDados) {
 
-            SqlComandos comandos = new SqlComandos();
+            SqlComandosUsuario comandos = new SqlComandosUsuario();
 
             string pessoa = novosDados.ToString();
 
@@ -80,7 +80,7 @@ namespace ApiSite.Controllers
 
             try
             {
-                comandos.SqlComandoAtualizarUsuario(id, usuario);
+                comandos.SqlComandoAtualizar(id, usuario);
 
                 Mensagem.RegistrarMensagem("Registrado com sucesso!");
             }
@@ -99,7 +99,7 @@ namespace ApiSite.Controllers
         public ActionResult<string> Delete(int id)
         {
 
-            SqlComandos comandos = new SqlComandos();
+            SqlComandosUsuario comandos = new SqlComandosUsuario();
 
             try
             {
