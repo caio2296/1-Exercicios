@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-
+using ApiSite.Repositorio.Interface;
 
 
 namespace ApiSite
 {
-    public class SqlComandosUsuario
+    public class SqlComandosUsuario: ISqlComandos
     {
         //criar uma interface com esses metodos 
+
+
 
         public  IEnumerable<Usuario> SqlComandoLeituras()
         {

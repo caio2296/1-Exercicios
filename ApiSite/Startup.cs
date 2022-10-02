@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using ApiSite.Repositorio.Interface;
 
 namespace ApiSite
 {
@@ -27,7 +28,7 @@ namespace ApiSite
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<SqlComandosUsuario>();
+            services.AddScoped<ISqlComandos, SqlComandosUsuario>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
