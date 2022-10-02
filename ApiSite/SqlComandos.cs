@@ -11,8 +11,10 @@ namespace ApiSite
     public class SqlComandos
     {
 
-        public static IEnumerable<string> SqlComandoLerUsuarios()
+        public  IEnumerable<Usuario> SqlComandoLerUsuarios()
         {
+            
+
             string connectionString =
                @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
@@ -20,10 +22,10 @@ namespace ApiSite
                connectionString))
             {
 
-                using (var comando = new SqlCommand("select * from Usuario ", conexao))
+                using (var comando = new SqlCommand("select id ,nome, idade, endereco, email, senha, adm from Usuario", conexao))
                 {
 
-                    List<string> usuario = new List<string>();
+                    List<Usuario> usuarios = new List<Usuario>();
                     conexao.Open();
 
 
@@ -31,19 +33,25 @@ namespace ApiSite
                     {
                         while (leitor.Read())
                         {
-                            usuario.Add(leitor[0].ToString());
-                            usuario.Add(leitor[1].ToString());
-                            usuario.Add(leitor[2].ToString());
-                            usuario.Add(leitor[3].ToString());
-                            usuario.Add(leitor[4].ToString());
-                            usuario.Add(leitor[5].ToString());
-                            usuario.Add(leitor[6].ToString());
+                            Usuario usuario = new Usuario(); 
+
+                            usuario.id = int.Parse(leitor["id"].ToString());
+                            usuario.nome = leitor["nome"].ToString();
+                            usuario.idade = int.Parse(leitor["idade"].ToString());
+                            usuario.endereco = leitor["endereco"].ToString();
+                            usuario.email = leitor["email"].ToString();
+                            usuario.senha = int.Parse(leitor["senha"].ToString());
+                            usuario.adm = int.Parse(leitor["adm"].ToString());
+
+                            
+
+                            usuarios.Add(usuario);
 
                         }
-
+                     
                     }
 
-                    return usuario;
+                    return usuarios;
                 }
 
 
@@ -53,8 +61,9 @@ namespace ApiSite
         }
 
 
-        public static IEnumerable<string> SqlComandoLerUsuario(int id)
+        public  IEnumerable<Usuario> SqlComandoLerUsuario(int id)
         {
+            Usuario usuario = new Usuario();
 
             string connectionString =
                @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
@@ -63,10 +72,10 @@ namespace ApiSite
                connectionString))
             {
 
-                using (var comando = new SqlCommand($"select * from Usuario where id ={id}", conexao))
+                using (var comando = new SqlCommand($"select select nome, idade, endereco, email, adm from Usuario; from Usuario where id ={id}", conexao))
                 {
 
-                    List<string> usuario = new List<string>();
+                    List<Usuario> usuarios = new List<Usuario>();
                     conexao.Open();
 
 
@@ -74,19 +83,23 @@ namespace ApiSite
                     {
                         while (leitor.Read())
                         {
-                            usuario.Add(leitor[0].ToString());
-                            usuario.Add(leitor[1].ToString());
-                            usuario.Add(leitor[2].ToString());
-                            usuario.Add(leitor[3].ToString());
-                            usuario.Add(leitor[4].ToString());
-                            usuario.Add(leitor[5].ToString());
-                            usuario.Add(leitor[6].ToString());
+                            usuario.id = int.Parse(leitor["id"].ToString());
+                            usuario.nome = leitor["nome"].ToString();
+                            usuario.idade = int.Parse(leitor["idade"].ToString());
+                            usuario.endereco = leitor["endereco"].ToString();
+                            usuario.email = leitor["email"].ToString();
+                            usuario.senha = int.Parse(leitor["senha"].ToString());
+                            usuario.adm =int.Parse(leitor["adm"].ToString());
+
+
+
+                            usuarios.Add(usuario);
 
                         }
 
                     }
 
-                    return usuario;
+                    return usuarios;
                 }
 
 
@@ -95,7 +108,7 @@ namespace ApiSite
         }
 
 
-        public static void SqlComandoCadastar(Usuario cadastro)
+        public  void SqlComandoCadastar(Usuario cadastro)
         {
             string connectionString =
               @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
@@ -125,12 +138,14 @@ namespace ApiSite
         }
 
         
-        public static void SqlComandoAtualizarUsuario(int id, Usuario usuarioNovosDados)
+        public  void SqlComandoAtualizarUsuario(int id, Usuario usuarioNovosDados)
         {
+            SqlComandos comandos = new SqlComandos();
+
             string connectionString = 
                 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-            List<string> usuarioAntigosDados = new List<string>();
+            List<Usuario> usuarioAntigosDados = new List<Usuario>();
 
             using (var conexao = new SqlConnection(connectionString))
             {
@@ -143,7 +158,7 @@ namespace ApiSite
                 {
 
 
-                    usuarioAntigosDados = SqlComandos.SqlComandoLerUsuario(id).ToList();
+                    usuarioAntigosDados = comandos.SqlComandoLerUsuario(id).ToList();
 
                     if (Verificacao.VerificarAtualizacaoUsuario(usuarioNovosDados, usuarioAntigosDados))
                     {
@@ -158,7 +173,7 @@ namespace ApiSite
         }
 
        
-        public static void SqlComandoDeletar(int id)
+        public  void SqlComandoDeletar(int id)
         {
             string connectionString =
                 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";

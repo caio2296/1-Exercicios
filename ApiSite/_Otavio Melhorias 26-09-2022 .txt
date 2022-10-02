@@ -1,0 +1,51 @@
+﻿1 - Utilizar Injeção de Dependencia (DI) 
+	1.1 - apenas estudar a inversão de controle ( IoC ) já que você vai usa-la na DI 
+	1.2 -apenas estudar também o principio de inversão de dependencia
+
+2 - Melhoria na query
+Nunca utilizar * no select ( pode pesquisar por que não fazer isso no código )
+
+select * from Usuario 
+
+solução
+select nome, idade, etc... from usuario
+
+3 - O método get deve retornar uma lista de usuario e não uma lista de string assim como o comando ler usuarios
+
+4 - Nunca vi métodos estáticos sendo utilizado como repositorio como a classe SqlComandos, 
+mas ainda vou pesquisar melhor o motivo e te passar.
+
+5 - Melhorar a leitura da busca de dados na base
+
+como ta 
+
+usuario.Add(leitor[0].ToString());
+usuario.Add(leitor[1].ToString());
+
+como poderia ficar melhor
+
+usuario.Nome = leitor["Nome"].ToString();
+usuario.email = leitor["Email"].ToString();
+
+usuarios.Add(usuario);
+
+A leitura do código é muito importante para a manutenção, por isso é muito importante escrever um código limpo
+
+6 - Para ter uma orientação mais visual de tudo isso, recomendo olhar para uma aplicação que fiz de estudo, usando um crud de produto
+	6.1 - Acessar o github e baixar o seguinte projeto: https://github.com/OtavioCordeiro/Microsservices
+	6.2 - Olhar para a classe Controller e entender o que acontece nela - https://github.com/OtavioCordeiro/Microsservices/blob/master/Discount.API/Controllers/DiscountController.cs
+	6.3 - Olhar para a classe Program - https://github.com/OtavioCordeiro/Microsservices/blob/master/Discount.API/Program.cs
+		  Veja que na classe program tem um método do net core 6.0 assim
+			
+			builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
+
+		  No net core 3.1 para tras, que é o seu caso, esse método fica da seguinte forma e dentro da classe STARTUP.CS
+
+		public void ConfigureServices(IServiceCollection services)
+        {            
+			services.AddScoped<IDiscountRepository, DiscountRepository>();
+			// e outras coisas que já fica no método aqui...             
+        }
+
+		    
+

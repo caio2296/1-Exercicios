@@ -14,20 +14,25 @@ namespace ApiSite.Controllers
     {
 
 
-        [HttpGet]
-        [Route("adm")]
-        public IEnumerable<string> Get()
-        {
 
-            return SqlComandos.SqlComandoLerUsuarios();
+       
+
+        [HttpGet]
+        //[Route("adm")]
+        public IEnumerable<Usuario> Get()
+        {
+            SqlComandos comandos = new SqlComandos();
+
+            return comandos.SqlComandoLerUsuarios();
         }
 
 
         [HttpGet("{id}")]
-        public IEnumerable<string> Get(int id)
+        public IEnumerable<Usuario> Get(int id)
         {
+            SqlComandos comandos = new SqlComandos();
 
-            return SqlComandos.SqlComandoLerUsuario(id);
+            return comandos.SqlComandoLerUsuario(id);
         }
 
 
@@ -35,7 +40,7 @@ namespace ApiSite.Controllers
         [HttpPost]
         public ActionResult<string> Post([FromBody] object cadastro)
         {
-
+            SqlComandos comandos = new SqlComandos();
 
             string pessoa = cadastro.ToString();
 
@@ -44,7 +49,7 @@ namespace ApiSite.Controllers
 
             try
             {
-                SqlComandos.SqlComandoCadastar(usuario);
+                comandos.SqlComandoCadastar(usuario);
                 Mensagem.RegistrarMensagem("Registrado com sucesso!");
             }
             catch (Exception ex)
@@ -67,6 +72,7 @@ namespace ApiSite.Controllers
         [HttpPatch("{id}")]
         public ActionResult<string> Patch(int id, [FromBody] object novosDados) {
 
+            SqlComandos comandos = new SqlComandos();
 
             string pessoa = novosDados.ToString();
 
@@ -74,7 +80,7 @@ namespace ApiSite.Controllers
 
             try
             {
-                SqlComandos.SqlComandoAtualizarUsuario(id, usuario);
+                comandos.SqlComandoAtualizarUsuario(id, usuario);
 
                 Mensagem.RegistrarMensagem("Registrado com sucesso!");
             }
@@ -93,9 +99,11 @@ namespace ApiSite.Controllers
         public ActionResult<string> Delete(int id)
         {
 
+            SqlComandos comandos = new SqlComandos();
+
             try
             {
-                SqlComandos.SqlComandoDeletar(id);
+                comandos.SqlComandoDeletar(id);
 
                 Mensagem.RegistrarMensagem("Usuario deletado com sucesso!");
             }
