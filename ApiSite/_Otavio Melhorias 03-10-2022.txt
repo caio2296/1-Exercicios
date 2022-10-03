@@ -1,0 +1,6 @@
+﻿1 - Método post e patch utilizando object como parametro e deve usar uma classe
+
+2 - retorno de método deve retornar um código http, estudar retorno de código http
+
+3 - Nome de objeto usuario sendo utilizado como repositorio, colocar um nome para melhor leitura
+
