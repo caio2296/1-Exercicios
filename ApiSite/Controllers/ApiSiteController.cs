@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.IO;
 using ApiSite.Repositorio.Interface;
+using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace ApiSite.Controllers
 {
@@ -14,12 +17,12 @@ namespace ApiSite.Controllers
     public class ApiSiteController : ControllerBase
     {
 
-        private readonly ISqlComandos usuario;
+        private readonly ISqlComandos RepositioDeUsuario;
 
 
         public ApiSiteController(ISqlComandos repositorio)
         {
-            usuario = repositorio;
+            RepositioDeUsuario = repositorio;
         }
 
 
@@ -28,8 +31,8 @@ namespace ApiSite.Controllers
         public IEnumerable<Usuario> Get()
         {
              
-
-            return this.usuario.SqlComandoLeituras();
+            
+            return this.RepositioDeUsuario.SqlComandoLeituras();
         }
 
 
@@ -38,24 +41,24 @@ namespace ApiSite.Controllers
         {
             
 
-            return this.usuario.SqlComandoLeitura(id);
+            return this.RepositioDeUsuario.SqlComandoLeitura(id);
         }
 
 
 
         [HttpPost]
-        public ActionResult<string> Post([FromBody] object cadastro)
+        public ActionResult<string> Post([FromBody] Usuario cadastro)
         {
+
+            var jsonPessoa = JsonConvert.SerializeObject(cadastro);
             
 
-            string pessoa = cadastro.ToString();
-
-            Usuario pessoaCadastrando = JsonConvert.DeserializeObject<Usuario>(pessoa);
+            Usuario pessoaCadastrando = JsonConvert.DeserializeObject<Usuario>(jsonPessoa);
 
 
             try
             {
-                this.usuario.SqlComandoCadastar(pessoaCadastrando);
+                this.RepositioDeUsuario.SqlComandoCadastar(pessoaCadastrando);
                 Mensagem.RegistrarMensagem("Registrado com sucesso!");
             }
             catch (Exception ex)
@@ -76,17 +79,18 @@ namespace ApiSite.Controllers
 
 
         [HttpPatch("{id}")]
-        public ActionResult<string> Patch(int id, [FromBody] object novosDados) {
+        public ActionResult<string> Patch(int id, [FromBody] Usuario novosDados) {
 
-           
 
-            string pessoa = novosDados.ToString();
+            string jsonPessoa = JsonConvert.SerializeObject(novosDados);
 
-            Usuario pessoaAtualizando = JsonConvert.DeserializeObject<Usuario>(pessoa);
+      
+            
+            Usuario pessoaAtualizando = JsonConvert.DeserializeObject<Usuario>(jsonPessoa);
 
             try
             {
-                this.usuario.SqlComandoAtualizar(id, pessoaAtualizando);
+                this.RepositioDeUsuario.SqlComandoAtualizar(id, pessoaAtualizando);
 
                 Mensagem.RegistrarMensagem("Registrado com sucesso!");
             }
@@ -109,7 +113,7 @@ namespace ApiSite.Controllers
 
             try
             {
-                this.usuario.SqlComandoDeletar(id);
+                this.RepositioDeUsuario.SqlComandoDeletar(id);
 
                 Mensagem.RegistrarMensagem("Usuario deletado com sucesso!");
             }

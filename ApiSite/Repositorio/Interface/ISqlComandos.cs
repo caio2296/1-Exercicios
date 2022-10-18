@@ -9,7 +9,7 @@ namespace ApiSite.Repositorio.Interface
     {
         public IEnumerable<Usuario> SqlComandoLeituras();
 
-        public IEnumerable<Usuario> SqlComandoLeitura(int id);
+        public List<Usuario> SqlComandoLeitura(int id);
 
         public void SqlComandoCadastar(Usuario cadastro);
 

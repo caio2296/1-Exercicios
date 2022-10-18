@@ -25,6 +25,18 @@ namespace ApiSite
 
         public static bool VerificarCadastro(Usuario cadastro)
         {
+            //SqlComandosUsuario usuarioAntigos = new SqlComandosUsuario();
+
+            //IEnumerable<Usuario> usuariosAntigosDados = usuarioAntigos.SqlComandoLeituras();
+
+            //foreach (var item in usuariosAntigosDados)
+            //{
+
+
+
+            //}
+
+
             return cadastro.nome != null
                                     && cadastro.nome != ""
                                      && cadastro.idade != 0
@@ -41,17 +53,21 @@ namespace ApiSite
         }
 
 
-        public static bool VerificarAtualizacaoUsuario(Usuario usuarioNovosDados, List<Usuario> usuarioAntigosDados)
+        public static bool VerificarAtualizacaoUsuario(Usuario usuarioNovosDados, IEnumerable<Usuario> usuarioAntigosDados)
         {
-            return (usuarioNovosDados.idade != 0)
-                                     && usuarioNovosDados.idade != int.Parse(usuarioAntigosDados[2].ToString())
+            string idadeAntiga = usuarioAntigosDados.Select(dado => dado.idade).ToArray<int>().GetValue(0).ToString();
+            string enderecoAntigo = usuarioAntigosDados.Select(dado => dado.endereco).ToArray<string>().GetValue(0).ToString();
+            string senhaAntiga = usuarioAntigosDados.Select(dado => dado.senha).ToArray<int>().GetValue(0).ToString();
+
+              return (usuarioNovosDados.idade != 0)
+                                     && usuarioNovosDados.idade != int.Parse(idadeAntiga)
                                       && Verificacao.ContarDigitosIdadeESenha(usuarioNovosDados.idade) >= 2
                                        && Verificacao.ContarDigitosIdadeESenha(usuarioNovosDados.idade) <= 3
                                         && usuarioNovosDados.endereco != null
                                          && usuarioNovosDados.endereco != ""
-                                          && usuarioNovosDados.endereco.ToString() != usuarioAntigosDados[3].ToString()
+                                          && usuarioNovosDados.endereco.ToString() != enderecoAntigo
                                            && usuarioNovosDados.senha != 0
-                                            && usuarioNovosDados.senha != int.Parse(usuarioAntigosDados[5].ToString())
+                                            && usuarioNovosDados.senha != int.Parse(senhaAntiga)
                                              && Verificacao.ContarDigitosIdadeESenha(usuarioNovosDados.senha) >= 6;
         }
 

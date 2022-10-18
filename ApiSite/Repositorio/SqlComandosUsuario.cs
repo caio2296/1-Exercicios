@@ -64,7 +64,7 @@ namespace ApiSite
         }
 
 
-        public  IEnumerable<Usuario> SqlComandoLeitura(int id)
+        public  List<Usuario> SqlComandoLeitura(int id)
         {
             Usuario usuario = new Usuario();
 
@@ -75,7 +75,7 @@ namespace ApiSite
                connectionString))
             {
 
-                using (var comando = new SqlCommand($"select select nome, idade, endereco, email, adm from Usuario; from Usuario where id ={id}", conexao))
+                using (var comando = new SqlCommand($" select nome, idade, endereco, email, senha, adm from Usuario  where id ={id}", conexao))
                 {
 
                     List<Usuario> usuarios = new List<Usuario>();
@@ -86,7 +86,7 @@ namespace ApiSite
                     {
                         while (leitor.Read())
                         {
-                            usuario.id = int.Parse(leitor["id"].ToString());
+                            
                             usuario.nome = leitor["nome"].ToString();
                             usuario.idade = int.Parse(leitor["idade"].ToString());
                             usuario.endereco = leitor["endereco"].ToString();
@@ -113,6 +113,8 @@ namespace ApiSite
 
         public  void SqlComandoCadastar(Usuario cadastro)
         {
+
+
             string connectionString =
               @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
@@ -148,7 +150,7 @@ namespace ApiSite
             string connectionString = 
                 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-            List<Usuario> usuarioAntigosDados = new List<Usuario>();
+            IEnumerable<Usuario> usuarioAntigosDados = new List<Usuario>();
 
             using (var conexao = new SqlConnection(connectionString))
             {
@@ -161,7 +163,9 @@ namespace ApiSite
                 {
 
 
-                    usuarioAntigosDados = comandos.SqlComandoLeitura(id).ToList();
+                    usuarioAntigosDados = comandos.SqlComandoLeitura(id);
+
+                   
 
                     if (Verificacao.VerificarAtualizacaoUsuario(usuarioNovosDados, usuarioAntigosDados))
                     {
