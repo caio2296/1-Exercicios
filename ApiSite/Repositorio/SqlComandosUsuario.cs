@@ -130,14 +130,11 @@ namespace ApiSite
 
                     conexao.Open();
 
-                    if (Verificacao.VerificarCadastro(cadastro))
-                    {
+                    
                         comando.ExecuteNonQuery();
-                    }
-                    else
-                    {
-                        throw new Exception("Falha ao registrar!");
-                    }
+                    
+                       
+                    
                 }
             }
         }
@@ -145,12 +142,12 @@ namespace ApiSite
         
         public  void SqlComandoAtualizar(int id, Usuario usuarioNovosDados)
         {
-            SqlComandosUsuario comandos = new SqlComandosUsuario();
+            
 
             string connectionString = 
                 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-            IEnumerable<Usuario> usuarioAntigosDados = new List<Usuario>();
+           
 
             using (var conexao = new SqlConnection(connectionString))
             {
@@ -163,18 +160,11 @@ namespace ApiSite
                 {
 
 
-                    usuarioAntigosDados = comandos.SqlComandoLeitura(id);
-
-                   
-
-                    if (Verificacao.VerificarAtualizacaoUsuario(usuarioNovosDados, usuarioAntigosDados))
-                    {
+                    
                         comando.ExecuteNonQuery();
-                    }
-                    else
-                    {
-                        throw new Exception("Falha ao registrar!");
-                    }
+                    
+                       
+                   
                 }
             }
         }
@@ -193,15 +183,10 @@ namespace ApiSite
                     $"delete from Usuario where id = {id} ",conexao))
                 {
 
-                    try
-                    {
+                    
                         comando.ExecuteNonQuery();
-                    }
-                    catch (Exception)
-                    {
-
-                        throw new Exception("Falha ao deletar!");
-                    }
+                    
+                  
 
                 }
 
