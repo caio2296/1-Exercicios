@@ -38,7 +38,9 @@ namespace ApiSite.Controllers
 
         protected ActionResult<Usuario> ResponsePost(Usuario result)
         {
-            if (Verificacao.VerificarCadastro(result))
+            
+
+            if (ModelState.IsValid)
             {
                 if (result == null)
                     return NoContent();
@@ -82,7 +84,7 @@ namespace ApiSite.Controllers
                 if (itemUsuario == null)
                     //
                     return NoContent();
-
+                
                 this._RepositorioDeUsuario.SqlComandoDeletar(id);
                 return Ok(itemUsuario);
             }
