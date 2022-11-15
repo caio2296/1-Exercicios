@@ -10,6 +10,7 @@ using ApiSite.Repositorio.Interface;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Routing;
+using ApiSite.Modulos;
 
 namespace ApiSite.Controllers
 {
@@ -18,10 +19,10 @@ namespace ApiSite.Controllers
     public class ApiSiteController : ApiControllerBase
     {
 
-        private readonly ISqlComandos RepositioDeUsuario;
+        private readonly ISqlRepositorio RepositioDeUsuario;
         
 
-        public ApiSiteController(ISqlComandos repositorio):base(repositorio)
+        public ApiSiteController(ISqlRepositorio repositorio):base(repositorio)
         {
             RepositioDeUsuario = repositorio;
         }
@@ -29,7 +30,7 @@ namespace ApiSite.Controllers
 
         [HttpGet]
         //[Route("adm")]
-        public ActionResult<IEnumerable<Usuario>> Get()
+        public ActionResult<IEnumerable<UsuarioDto>> Get()
         {
 
            
@@ -39,7 +40,7 @@ namespace ApiSite.Controllers
 
 
         [HttpGet("{id}")]
-        public ActionResult<List<Usuario>> Get(int id)
+        public ActionResult<List<UsuarioDto>> Get(int id)
         {
 
             return ResponseGet(this.RepositioDeUsuario.SqlComandoLeitura(id));
@@ -64,14 +65,14 @@ namespace ApiSite.Controllers
 
 
         [HttpPatch("{id}")]
-        public ActionResult<string> Patch(int id, [FromBody] Usuario novosDados) {
+        public ActionResult<string> Patch(int id, [FromBody] UsuarioDto novosDados) {
 
 
             string jsonPessoa = JsonConvert.SerializeObject(novosDados);
 
-      
-            
-            Usuario pessoaAtualizando = JsonConvert.DeserializeObject<Usuario>(jsonPessoa);
+
+
+            UsuarioDto pessoaAtualizando = JsonConvert.DeserializeObject<UsuarioDto>(jsonPessoa);
 
 
             return ResponsePutPatch(id, pessoaAtualizando);

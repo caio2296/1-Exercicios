@@ -28,7 +28,7 @@ namespace ApiSite
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<ISqlComandos, SqlComandosUsuario>();
+            services.AddScoped<ISqlRepositorio, SqlRepositorioUsuario>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

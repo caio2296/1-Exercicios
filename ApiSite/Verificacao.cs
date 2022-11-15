@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApiSite.Modulos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -53,7 +54,7 @@ namespace ApiSite
         }
 
 
-        public static bool VerificarAtualizacaoUsuario(Usuario usuarioNovosDados, IEnumerable<Usuario> usuarioAntigosDados)
+        public static bool VerificarAtualizacaoUsuario(UsuarioDto usuarioNovosDados, IEnumerable<UsuarioDto> usuarioAntigosDados)
         {
             string idadeAntiga = usuarioAntigosDados.Select(dado => dado.idade).ToArray<int>().GetValue(0).ToString();
             string enderecoAntigo = usuarioAntigosDados.Select(dado => dado.endereco).ToArray<string>().GetValue(0).ToString();

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiSite.Repositorio.Interface;
+using ApiSite.Modulos;
 
 namespace ApiSite.Controllers
 {
@@ -13,11 +14,11 @@ namespace ApiSite.Controllers
     public abstract class ApiControllerBase : ControllerBase
     {
 
-        private readonly ISqlComandos _RepositorioDeUsuario;
+        private readonly ISqlRepositorio _RepositorioDeUsuario;
 
         
 
-        public ApiControllerBase(ISqlComandos repositorioDeUsuario )
+        public ApiControllerBase(ISqlRepositorio repositorioDeUsuario )
         {
             _RepositorioDeUsuario = repositorioDeUsuario;
             
@@ -38,7 +39,7 @@ namespace ApiSite.Controllers
 
         protected ActionResult<Usuario> ResponsePost(Usuario result)
         {
-            
+           
 
             if (ModelState.IsValid)
             {
@@ -56,11 +57,11 @@ namespace ApiSite.Controllers
 
 
 
-        protected ActionResult ResponsePutPatch(int id,Usuario novoUsuario)
+        protected ActionResult ResponsePutPatch(int id, UsuarioDto novoUsuario)
         {
            
 
-            IEnumerable<Usuario> usuarioAntigosDados = new List<Usuario>();
+            IEnumerable<UsuarioDto> usuarioAntigosDados = new List<UsuarioDto>();
             usuarioAntigosDados = _RepositorioDeUsuario.SqlComandoLeitura(id);
 
             if (Verificacao.VerificarAtualizacaoUsuario(novoUsuario, usuarioAntigosDados))
