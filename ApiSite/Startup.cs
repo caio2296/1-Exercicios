@@ -12,6 +12,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ApiSite.Repositorio.Interface;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using ApiSite.Service.Interface;
+using ApiSite.Service;
+using ApiSite.Controllers;
 
 namespace ApiSite
 {
@@ -29,6 +35,34 @@ namespace ApiSite
         {
             services.AddControllers();
             services.AddScoped<ISqlRepositorio, SqlRepositorioUsuario>();
+
+            services.AddScoped<ITokenService, TokenService>();
+            
+
+            services.AddHttpContextAccessor();
+
+
+            var key = Encoding.ASCII.GetBytes("qwerenvgjidsfjfgiojb@!");
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+
+                };
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +77,7 @@ namespace ApiSite
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

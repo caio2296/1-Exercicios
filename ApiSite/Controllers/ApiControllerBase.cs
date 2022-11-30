@@ -37,7 +37,7 @@ namespace ApiSite.Controllers
 
         }
 
-        protected ActionResult<Usuario> ResponsePost(Usuario result)
+        protected ActionResult<UsuarioVerificacaoDto> ResponsePost(UsuarioVerificacaoDto result)
         {
            
 
@@ -77,7 +77,7 @@ namespace ApiSite.Controllers
 
 
 
-        protected ActionResult<Usuario> ResponseDelete(int id)
+        protected ActionResult<UsuarioVerificacaoDto> ResponseDelete(int id)
         {
            var itemUsuario = this._RepositorioDeUsuario.SqlComandoLeitura(id);
             if (id > 0)

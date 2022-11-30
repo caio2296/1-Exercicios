@@ -11,6 +11,8 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Routing;
 using ApiSite.Modulos;
+using Microsoft.AspNetCore.Authorization;
+using ApiSite.Service.Interface;
 
 namespace ApiSite.Controllers
 {
@@ -19,22 +21,30 @@ namespace ApiSite.Controllers
     public class ApiSiteController : ApiControllerBase
     {
 
-        private readonly ISqlRepositorio RepositioDeUsuario;
+
+        
+        private readonly ITokenService _TokenService;
+
+
+        private readonly ISqlRepositorio _RepositioDeUsuario;
         
 
-        public ApiSiteController(ISqlRepositorio repositorio):base(repositorio)
+        public ApiSiteController(ISqlRepositorio repositorio, ITokenService tokenService) :base(repositorio)
         {
-            RepositioDeUsuario = repositorio;
+            _RepositioDeUsuario = repositorio;
+
+            _TokenService = tokenService;
         }
 
 
         [HttpGet]
-        //[Route("adm")]
+        [Route("/adm")]
+        [Authorize(Roles ="1")]
         public ActionResult<IEnumerable<UsuarioDto>> Get()
         {
 
            
-            return ResponseGet(this.RepositioDeUsuario.SqlComandoLeituras());
+            return ResponseGet(this._RepositioDeUsuario.SqlComandoLeituras());
             
         }
 
@@ -43,19 +53,19 @@ namespace ApiSite.Controllers
         public ActionResult<List<UsuarioDto>> Get(int id)
         {
 
-            return ResponseGet(this.RepositioDeUsuario.SqlComandoLeitura(id));
+            return ResponseGet(this._RepositioDeUsuario.SqlComandoLeitura(id));
         }
 
 
 
         [HttpPost]
-        public ActionResult<Usuario> Post([FromBody] Usuario cadastro)
+        public ActionResult<UsuarioVerificacaoDto> Post([FromBody] UsuarioVerificacaoDto cadastro)
         {
 
             var jsonPessoa = JsonConvert.SerializeObject(cadastro);
             
 
-            Usuario pessoaCadastrando = JsonConvert.DeserializeObject<Usuario>(jsonPessoa);
+            UsuarioVerificacaoDto pessoaCadastrando = JsonConvert.DeserializeObject<UsuarioVerificacaoDto>(jsonPessoa);
 
 
              return ResponsePost(pessoaCadastrando);
@@ -84,13 +94,49 @@ namespace ApiSite.Controllers
 
 
         [HttpDelete("{id}")]
-        public ActionResult<Usuario> Delete(int id)
+        public ActionResult<UsuarioVerificacaoDto> Delete(int id)
         {
 
             return ResponseDelete(id);
 
 
         }
+
+
+
+
+        [HttpPost]
+        [Route("/login")]
+        [AllowAnonymous]
+        public ActionResult<string> Autenticar([FromBody] UsuarioVerificacaoDto model)
+        {
+
+            var a = model;
+
+            if (ModelState.IsValid)
+            {
+                var usuario = _RepositioDeUsuario.SqlComandoVerificarUsuario(model);
+
+
+                if (usuario == null)
+                {
+                    NotFound(new { message = "usuario ou senha invalidos!" });
+                }
+                //concertar aqui 
+                var token = _TokenService.GenerateToken(usuario);
+                model.senha = 0;
+
+                return new
+                {
+                    usuario = usuario,
+                    token = token
+                }.ToString();
+            }
+
+            return BadRequest(new { message = "usuario ou senha invalidos!" });
+        }
+
+
 
 
     }

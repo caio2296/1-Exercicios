@@ -24,34 +24,34 @@ namespace ApiSite
         }
 
 
-        public static bool VerificarCadastro(Usuario cadastro)
-        {
-            //SqlComandosUsuario usuarioAntigos = new SqlComandosUsuario();
+        //public static bool VerificarCadastro(UsuarioVerificacaoDto cadastro)
+        //{
+        //    //SqlComandosUsuario usuarioAntigos = new SqlComandosUsuario();
 
-            //IEnumerable<Usuario> usuariosAntigosDados = usuarioAntigos.SqlComandoLeituras();
+        //    //IEnumerable<Usuario> usuariosAntigosDados = usuarioAntigos.SqlComandoLeituras();
 
-            //foreach (var item in usuariosAntigosDados)
-            //{
-
-
-
-            //}
+        //    //foreach (var item in usuariosAntigosDados)
+        //    //{
 
 
-            return cadastro.nome != null
-                                    && cadastro.nome != ""
-                                     && cadastro.idade != 0
-                                      && cadastro.idade >= 18
-                                       && Verificacao.ContarDigitosIdadeESenha(cadastro.idade) >= 2
-                                        && Verificacao.ContarDigitosIdadeESenha(cadastro.idade) <= 3
-                                         && cadastro.endereco != null
-                                          && cadastro.endereco != ""
-                                           && cadastro.email != null
-                                            && cadastro.email != ""
-                                             && cadastro.senha >= 0
-                                              && cadastro.senha != 0
-                                               && Verificacao.ContarDigitosIdadeESenha(cadastro.senha) >= 6;
-        }
+
+        //    //}
+
+
+        //    return cadastro.nome != null
+        //                            && cadastro.nome != ""
+        //                             && cadastro.idade != 0
+        //                              && cadastro.idade >= 18
+        //                               && Verificacao.ContarDigitosIdadeESenha(cadastro.idade) >= 2
+        //                                && Verificacao.ContarDigitosIdadeESenha(cadastro.idade) <= 3
+        //                                 && cadastro.endereco != null
+        //                                  && cadastro.endereco != ""
+        //                                   && cadastro.email != null
+        //                                    && cadastro.email != ""
+        //                                     && cadastro.senha >= 0
+        //                                      && cadastro.senha != 0
+        //                                       && Verificacao.ContarDigitosIdadeESenha(cadastro.senha) >= 6;
+        //}
 
 
         public static bool VerificarAtualizacaoUsuario(UsuarioDto usuarioNovosDados, IEnumerable<UsuarioDto> usuarioAntigosDados)

@@ -8,15 +8,15 @@ using ApiSite.Modulos;
 
 namespace ApiSite
 {
-    public class SqlRepositorioUsuario: ISqlRepositorio
+    public class SqlRepositorioUsuario : ISqlRepositorio
     {
         //criar uma interface com esses metodos 
 
 
 
-        public  IEnumerable<UsuarioDto> SqlComandoLeituras()
+        public IEnumerable<UsuarioDto> SqlComandoLeituras()
         {
-            
+
 
             string connectionString =
                @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
@@ -36,26 +36,27 @@ namespace ApiSite
                     {
                         while (leitor.Read())
                         {
-                            UsuarioDto usuario = new UsuarioDto(); 
+                            UsuarioDto usuario = new UsuarioDto();
 
-                            
+
                             usuario.nome = leitor["nome"].ToString();
                             usuario.idade = int.Parse(leitor["idade"].ToString());
                             usuario.endereco = leitor["endereco"].ToString();
                             usuario.email = leitor["email"].ToString();
                             usuario.senha = int.Parse(leitor["senha"].ToString());
-                           
+                            usuario.adm = int.Parse(leitor["adm"].ToString());
 
-                            
+
+
 
                             usuarios.Add(usuario);
 
                         }
-                     
+
                     }
 
                     //teste
-                    return usuarios.Select(x => new UsuarioDto { nome = x.nome , email = x.email});
+                    return usuarios.Select(x => new UsuarioDto { nome = x.nome, email = x.email });
                 }
 
 
@@ -65,7 +66,7 @@ namespace ApiSite
         }
 
 
-        public  List<UsuarioDto> SqlComandoLeitura(int id)
+        public List<UsuarioDto> SqlComandoLeitura(int id)
         {
             UsuarioDto usuario = new UsuarioDto();
 
@@ -87,13 +88,13 @@ namespace ApiSite
                     {
                         while (leitor.Read())
                         {
-                            
+
                             usuario.nome = leitor["nome"].ToString();
                             usuario.idade = int.Parse(leitor["idade"].ToString());
                             usuario.endereco = leitor["endereco"].ToString();
                             usuario.email = leitor["email"].ToString();
                             usuario.senha = int.Parse(leitor["senha"].ToString());
-                           
+                            usuario.adm = int.Parse(leitor["adm"].ToString());
 
 
 
@@ -112,7 +113,7 @@ namespace ApiSite
         }
 
 
-        public  void SqlComandoCadastar(Usuario cadastro)
+        public void SqlComandoCadastar(UsuarioVerificacaoDto cadastro)
         {
 
 
@@ -125,30 +126,30 @@ namespace ApiSite
                 // consertar a tabela para não aceitar valores nulos 
                 using (var comando = new SqlCommand(
 
-                    $"insert into Usuario(nome, idade, endereco, email, senha)" +
-                    $" values('{cadastro.nome}',{cadastro.idade},'{cadastro.endereco}','{cadastro.email}',{cadastro.senha})", conexao))
+                    $"insert into Usuario(nome,   senha)" +
+                    $" values('{cadastro.nome}',{cadastro.senha})", conexao))
                 {
 
                     conexao.Open();
 
-                    
-                        comando.ExecuteNonQuery();
-                    
-                       
-                    
+
+                    comando.ExecuteNonQuery();
+
+
+
                 }
             }
         }
 
-        
-        public  void SqlComandoAtualizar(int id, UsuarioDto usuarioNovosDados)
-        {
-            
 
-            string connectionString = 
+        public void SqlComandoAtualizar(int id, UsuarioDto usuarioNovosDados)
+        {
+
+
+            string connectionString =
                 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-           
+
 
             using (var conexao = new SqlConnection(connectionString))
             {
@@ -157,21 +158,21 @@ namespace ApiSite
                 using (var comando = new SqlCommand(
                     $"update Usuario set idade = {usuarioNovosDados.idade} ," +
                      $" endereco = '{usuarioNovosDados.endereco}' ,senha = {usuarioNovosDados.senha}" +
-                      $" where id ={id}",conexao))
+                      $" where id ={id}", conexao))
                 {
 
 
-                    
-                        comando.ExecuteNonQuery();
-                    
-                       
-                   
+
+                    comando.ExecuteNonQuery();
+
+
+
                 }
             }
         }
 
-       
-        public  void SqlComandoDeletar(int id)
+
+        public void SqlComandoDeletar(int id)
         {
             string connectionString =
                 @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
@@ -181,13 +182,13 @@ namespace ApiSite
                 conexao.Open();
 
                 using (var comando = new SqlCommand(
-                    $"delete from Usuario where id = {id} ",conexao))
+                    $"delete from Usuario where id = {id} ", conexao))
                 {
 
-                    
-                        comando.ExecuteNonQuery();
-                    
-                  
+
+                    comando.ExecuteNonQuery();
+
+
 
                 }
 
@@ -195,8 +196,48 @@ namespace ApiSite
 
         }
 
+        public UsuarioVerificacaoDto SqlComandoVerificarUsuario(UsuarioVerificacaoDto model)
+        {
 
-       
+            UsuarioVerificacaoDto usuario = new UsuarioVerificacaoDto();
 
+            string connectionString =
+               @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=RegistroUsuario;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+            using (var conexao = new SqlConnection(
+               connectionString))
+            {
+
+                using (var comando = new SqlCommand($" select nome, email, senha, adm from Usuario  where nome ='{model.nome}' and senha ={model.senha}", conexao))
+                {
+
+
+                    conexao.Open();
+
+
+                    using (SqlDataReader leitor = comando.ExecuteReader())
+                    {
+                        while (leitor.Read())
+                        {
+
+                            usuario.nome = leitor["nome"].ToString();
+                           
+                            usuario.senha = int.Parse(leitor["senha"].ToString());
+                            usuario.adm = int.Parse(leitor["adm"].ToString());
+
+
+
+
+
+                        }
+
+                    }
+
+                    return usuario;
+
+
+                }
+            }
+        }
     }
 }

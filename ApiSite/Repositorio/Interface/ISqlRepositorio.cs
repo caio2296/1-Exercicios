@@ -12,11 +12,17 @@ namespace ApiSite.Repositorio.Interface
 
         public List<UsuarioDto> SqlComandoLeitura(int id);
 
-        public void SqlComandoCadastar(Usuario cadastro);
+        public void SqlComandoCadastar(UsuarioVerificacaoDto cadastro);
 
         public void SqlComandoAtualizar(int id, UsuarioDto usuarioNovosDados);
 
         public void SqlComandoDeletar(int id);
+
+
+        public UsuarioVerificacaoDto SqlComandoVerificarUsuario(UsuarioVerificacaoDto usuario);
+        
+
+
 
     }
 }
