@@ -41,8 +41,10 @@ namespace ApiSite
 
             services.AddHttpContextAccessor();
 
+            var conexao = Configuration.GetConnectionString("App");
+            var TokenConfiguration = Configuration["TokenConfiguration"];
 
-            var key = Encoding.ASCII.GetBytes("qwerenvgjidsfjfgiojb@!");
+            var key = Encoding.ASCII.GetBytes(TokenConfiguration);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
